@@ -19,16 +19,17 @@ mode  ConcurrencyMode = SINGLE;
  * Display usage message.
  */
 void
-usage(const char *progname)
+usage(const char *progname, int status)
 {
-    fprintf(stderr, "usage: %s [hcmMpr]\n", progname);
-    fprintf(stderr, "options:\n");
+    fprintf(stderr, "Usage: %s [hcmMpr]\n", progname);
+    fprintf(stderr, "Options:\n");
     fprintf(stderr, "    -h            Display help message\n");
     fprintf(stderr, "    -c mode       Single or Forking mode\n");
     fprintf(stderr, "    -m path       Path to mimetypes file\n");
     fprintf(stderr, "    -M mimetype   Default mimetype\n");
     fprintf(stderr, "    -p port       Port to listen on\n");
     fprintf(stderr, "    -r path       Root directory\n");
+    exit(status);
 }
 
 /**
