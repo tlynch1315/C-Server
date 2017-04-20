@@ -6,8 +6,20 @@ Members
 
 - Domer McDomerson (dmcdomer@nd.edu)
 
-Responses
----------
+Summary
+-------
+
+Latency
+-------
+
+Throughput
+----------
+
+Analysis
+--------
+
+Conclusion
+----------
 
 Contributions
 -------------
