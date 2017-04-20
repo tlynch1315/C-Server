@@ -50,6 +50,9 @@ handle_request(struct request *r)
 http_status
 handle_browse_request(struct request *r)
 {
+    struct dirent **entries;
+    int n;
+
     /* Open a directory for reading or scanning */
 
     /* Write HTTP Header with OK Status and text/html Content-Type */
@@ -71,6 +74,11 @@ handle_browse_request(struct request *r)
 http_status
 handle_file_request(struct request *r)
 {
+    FILE *fs;
+    char buffer[BUFSIZ];
+    char *mimetype = NULL;
+    size_t nread;
+
     /* Open file for reading */
 
     /* Determine mimetype */
@@ -96,12 +104,17 @@ handle_file_request(struct request *r)
 http_status
 handle_cgi_request(struct request *r)
 {
+    FILE *pfs;
+    char buffer[BUFSIZ];
+    struct header_t *header;
+
     /* Export CGI environment variables from request:
     * http://en.wikipedia.org/wiki/Common_Gateway_Interface */
 
     /* Export CGI environment variables from request headers */
 
     /* POpen CGI Script */
+
 
     /* Copy data from popen to socket */
 
@@ -118,6 +131,8 @@ handle_cgi_request(struct request *r)
 http_status
 handle_error(struct request *r, http_status status)
 {
+    const char *status_string = http_status_string(status);
+
     /* Write HTTP Header */
 
     /* Write HTML Description of Error*/

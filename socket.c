@@ -18,10 +18,28 @@
 int
 socket_listen(const char *port)
 {
+    struct addrinfo  hints;
+    struct addrinfo *results;
+    int    socket_fd = -1;
+
     /* Lookup server address information */
 
     /* For each server entry, allocate socket and try to connect */
-    return -1;
+    for (struct addrinfo *p = results; p != NULL; p = p->ai_next) {
+	/* Allocate socket */
+
+	/* Bind socket */
+
+    	/* Listen to socket */
+
+	goto success;
+    }
+
+    socket_fd = -1;
+
+success:
+    freeaddrinfo(results);
+    return socket_fd;
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */

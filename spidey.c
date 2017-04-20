@@ -38,13 +38,20 @@ usage(const char *progname, int status)
 int
 main(int argc, char *argv[])
 {
+    int c;
+    int sfd;
+
     /* Parse command line options */
 
     /* Listen to server socket */
 
     /* Determine real RootPath */
 
-    /* Log port and display debugging information */
+    log("Listening on port %s", Port);
+    debug("RootPath        = %s", RootPath);
+    debug("MimeTypesPath   = %s", MimeTypesPath);
+    debug("DefaultMimeType = %s", DefaultMimeType);
+    debug("ConcurrencyMode = %s", ConcurrencyMode == SINGLE ? "Single" : "Forking");
 
     /* Start either forking or single HTTP server */
     return EXIT_SUCCESS;

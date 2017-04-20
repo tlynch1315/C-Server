@@ -27,6 +27,10 @@ int parse_request_headers(struct request *r);
 struct request *
 accept_request(int sfd)
 {
+    struct request_t *r;
+    struct sockaddr raddr;
+    socklen_t rlen;
+
     /* Allocate request struct (zeroed) */
 
     /* Accept a client */
@@ -34,6 +38,12 @@ accept_request(int sfd)
     /* Lookup client information */
 
     /* Open socket stream */
+
+    log("Accepted request from %s:%s", r->host, r->port);
+    return r;
+
+fail:
+    free_request(r);
     return NULL;
 }
 
@@ -50,6 +60,12 @@ accept_request(int sfd)
 void
 free_request(struct request *r)
 {
+    struct header_t *header;
+
+    if (r == NULL) {
+    	return;
+    }
+
     /* Close socket or fd */
 
     /* Free allocated strings */
@@ -97,7 +113,15 @@ parse_request_method(struct request *r)
     /* Parse query from uri */
 
     /* Record method, uri, and query in request struct */
+
+    debug("HTTP METHOD: %s", r->method);
+    debug("HTTP URI:    %s", r->uri);
+    debug("HTTP QUERY:  %s", r->query);
+
     return 0;
+
+fail:
+    return -1;
 }
 
 /**
@@ -127,7 +151,22 @@ parse_request_method(struct request *r)
 int
 parse_request_headers(struct request *r)
 {
+    struct header_t *header;
+    char buffer[BUFSIZ];
+    char *name;
+    char *value;
+    
+    /* Parse headers from socket */
+
+#ifndef NDEBUG
+    for (struct header *header = r->headers; header != NULL; header = header->next) {
+    	debug("HTTP HEADER %s = %s", header->name, header->value);
+    }
+#endif
     return 0;
+
+fail:
+    return -1;
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */

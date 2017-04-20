@@ -31,13 +31,26 @@
 char *
 determine_mimetype(const char *path)
 {
+    char *ext;
+    char *mimetype;
+    char *token;
+    char buffer[BUFSIZ];
+    FILE *fs = NULL;
+    
     /* Find file extension */
 
     /* Open MimeTypesPath file */
 
     /* Scan file for matching file extensions */
+   
+fail:
+    mimetype = DefaultMimeType;
 
-    return NULL;
+done:
+    if (fs) {
+        fclose(fs);
+    }
+    return strdup(mimetype);
 }
 
 /**
@@ -55,7 +68,10 @@ determine_mimetype(const char *path)
 char *
 determine_request_path(const char *uri)
 {
-    return NULL;
+    char path[BUFSIZ];
+    char real[BUFSIZ];
+
+    return strdup(real);
 }
 
 /**
@@ -72,7 +88,10 @@ determine_request_path(const char *uri)
 request_type
 determine_request_type(const char *path)
 {
-    return REQUEST_BAD;
+    struct stat s;
+    request_type_t type;
+
+    return (type);
 }
 
 /**
@@ -83,7 +102,9 @@ determine_request_type(const char *path)
 const char *
 http_status_string(http_status status)
 {
-    return NULL;
+    const char *status_string;
+
+    return status_string;
 }
 
 /**
