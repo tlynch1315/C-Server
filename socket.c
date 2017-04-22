@@ -25,19 +25,14 @@ socket_listen(const char *port)
     /* Lookup server address information */
 
     /* For each server entry, allocate socket and try to connect */
-    for (struct addrinfo *p = results; p != NULL; p = p->ai_next) {
+    for (struct addrinfo *p = results; p != NULL && socket_fd < 0; p = p->ai_next) {
 	/* Allocate socket */
 
 	/* Bind socket */
 
     	/* Listen to socket */
-
-	goto success;
     }
 
-    socket_fd = -1;
-
-success:
     freeaddrinfo(results);
     return socket_fd;
 }

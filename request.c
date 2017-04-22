@@ -151,7 +151,7 @@ fail:
 int
 parse_request_headers(struct request *r)
 {
-    struct header_t *header;
+    struct header *curr = NULL;
     char buffer[BUFSIZ];
     char *name;
     char *value;
