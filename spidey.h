@@ -57,7 +57,7 @@ struct request {
     char *query;            /*< HTTP query string */
 
     char host[NI_MAXHOST];
-    char port[NI_MAXHOST];
+    char port[NI_MAXSERV];
 
     struct header *headers; /*< List of name, value pairs */
 };
