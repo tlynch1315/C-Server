@@ -106,7 +106,7 @@ handle_cgi_request(struct request *r)
 {
     FILE *pfs;
     char buffer[BUFSIZ];
-    struct header_t *header;
+    struct header *header;
 
     /* Export CGI environment variables from request:
     * http://en.wikipedia.org/wiki/Common_Gateway_Interface */

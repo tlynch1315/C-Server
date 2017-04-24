@@ -60,7 +60,7 @@ fail:
 void
 free_request(struct request *r)
 {
-    struct header_t *header;
+    struct header *header;
 
     if (r == NULL) {
     	return;
