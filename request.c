@@ -27,7 +27,7 @@ int parse_request_headers(struct request *r);
 struct request *
 accept_request(int sfd)
 {
-    struct request_t *r;
+    struct request *r;
     struct sockaddr raddr;
     socklen_t rlen;
 

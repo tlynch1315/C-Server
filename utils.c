@@ -89,7 +89,7 @@ request_type
 determine_request_type(const char *path)
 {
     struct stat s;
-    request_type_t type;
+    request_type type;
 
     return (type);
 }
