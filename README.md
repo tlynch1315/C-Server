@@ -3,8 +3,9 @@ Project 02 - README
 
 Members
 -------
-
-- Domer McDomerson (dmcdomer@nd.edu)
+- Tommy Lynch(tlynch2@nd.edu)
+- Zac Cendejas(zcendeja@nd.edu)
+- Will Fritz(wfritz@nd.edu)
 
 Summary
 -------
