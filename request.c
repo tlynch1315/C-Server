@@ -80,18 +80,35 @@ void
 free_request(struct request *r)
 {
     struct header *header;
+	header = r->headers;
 
     if (r == NULL) {
     	return;
     }
 
     /* Close socket or fd */
+	close(r->fd);
 
     /* Free allocated strings */
+	free(r->method);
+	free(r->uri);
+	free(r->path);
+	free(r->query);
+	free(r->host);
+	free(r->port);
 
     /* Free headers */
+	struct header *temp
+		while (header != NULL){
+			temp = header->next;
+			free(header->name);
+			free(header->value);
+			free(header);
+			header = temp;
+		}
 
     /* Free request */
+	free(r);
 }
 
 /**
@@ -104,8 +121,20 @@ int
 parse_request(struct request *r)
 {
     /* Parse HTTP Request Method */
+	int Method;
+	if (Method = parse_request_method(r)){
+		fprintf(stderr, "Parsing the request method failed");
+		return -1;
+	}
 
     /* Parse HTTP Requet Headers*/
+	int Header;
+	if (Header = parse_request_headers(r)){
+		fprintf(stderr, "Parsing the request header failed");
+		return -1;
+	}
+
+	return 0;
 }
 
 /**
@@ -126,12 +155,35 @@ int
 parse_request_method(struct request *r)
 {
     /* Read line from socket */
+	char *buffer[BUFSIZ];
+	fgets(buffer, BUFSIZ, r->fd);
 
     /* Parse method and uri */
+	char *Method;
+	if (Method = strtok(buffer, WHITESPACE) == NULL){
+		fprintf(stderr, "Method entered incorrectly\n");
+		goto fail;
+	}
+	char *uri;
+	if (uri = strok(NULL, WHITESPACE) == NULL){
+		fprintf(stderr, "URI entered incorrectly\n");
+		goto fail;
+	}
 
     /* Parse query from uri */
+	if (strlen(uri) > 1){
+		char *query = strchr(uri, '?');
+		if (query == NULL){
+			fprintf(stderr, "Query entered incorrectly\n");
+			goto fail;
+		}
+		query++;
+	}
 
     /* Record method, uri, and query in request struct */
+	r->method = strdup(Method);
+	r->uri = strdup(uri);
+	r->query = strdup(query);
 
     debug("HTTP METHOD: %s", r->method);
     debug("HTTP URI:    %s", r->uri);
