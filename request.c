@@ -30,14 +30,33 @@ accept_request(int sfd)
     struct request *r;
     struct sockaddr raddr;
     socklen_t rlen;
+    char host[NI_MAXHOST];
+    char port[NI_MAXSERV];
+    int flags = NI_NUMERICHOST | NI_NUMERICSERV;
 
     /* Allocate request struct (zeroed) */
+    r = calloc(1, sizeof(struct requests));
 
     /* Accept a client */
+    int accepted;
+    if(accepted = accept(sfd, &raddr, &rlen) < 0){
+        fprintf(stderr, "accept failed: %s\n", strerror(errno));
+        goto fail;
+    }
 
     /* Lookup client information */
+    int nameData;
+    if(nameData = getnameinfo(&raddr, rlen, host, sizeof(r->host), sizeof(port), flags) != 0){
+        fprintf(stderr, "lookup failed: %s\n", strerror(errno));
+        goto fail;
+    }
 
     /* Open socket stream */
+    FILE * stream;
+    if(stream = fdopen(accepted, "w+") == NULL){
+        fprintf(stderr, "open socket failed: %s\n", strerror(errno));
+        goto fail;
+    }
 
     log("Accepted request from %s:%s", r->host, r->port);
     return r;
