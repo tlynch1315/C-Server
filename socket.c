@@ -25,9 +25,9 @@ socket_listen(const char *port)
 	};
     struct addrinfo *results;
     int    socket_fd = -1;
-
+	int status;
     /* Lookup server address information */
-	if ((int status = getaddrinfo(NULL, port, &hints, &results)) != 0){
+	if ((status = getaddrinfo(NULL, port, &hints, &results)) != 0){
 		fprintf(stderr, "getaddrinfo failed: %s\n", gai_strerror(status));
 		return -1;
 	}
