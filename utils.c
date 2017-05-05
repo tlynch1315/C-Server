@@ -110,12 +110,29 @@ determine_request_type(const char *path)
 {
     struct stat s;
     request_type type;
-    type = REQUEST_BAD;
     
-    if ((s.st_mode & S_IFMT) == S_IFDIR) type = REQUEST_BROWSE;
-    else if ((s.st_mode & S_IFMT) == S_IFREG){
-        if (!access(path, X_OK)) type = REQUEST_CGI;
-        else if (!access(path, R_OK)) type = REQUEST_FILE;
+    if(stat(path, &s) < 0) {
+        debug("Bad type Error");
+        return REQUEST_BAD;
+    }
+
+    if (S_ISDIR(s.st_mode)){
+        type = REQUEST_BROWSE;
+        debug("Request Browse type");
+    }
+    else if (S_ISREG(s.st_mode)){
+        if (!access(path, X_OK)){
+            type = REQUEST_CGI;
+            debug("Request Cgi type");
+        }
+        else if (!access(path, R_OK)) {
+            type = REQUEST_FILE;
+            debug("Request file type");
+        }
+    }
+    else {
+        type = REQUEST_BAD;
+        debug("Bad type");
     }
     return (type);
 }
