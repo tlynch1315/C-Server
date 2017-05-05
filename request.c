@@ -47,7 +47,7 @@ accept_request(int sfd)
     /* Lookup client information */
     rlen = sizeof(struct sockaddr);
     int nameData;
-    if((nameData = getnameinfo(&raddr, rlen, r->host, sizeof(r->host), r->port, sizeof(r->port), flags)) != 0){
+    if((nameData = getnameinfo(&raddr, rlen, r->host, sizeof(r->host), r->port, sizeof(r->port), flags)) < 0){
         fprintf(stderr, "lookup failed: %s\n", strerror(errno));
         goto fail;
     }
