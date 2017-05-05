@@ -35,6 +35,10 @@ handle_request(struct request *r)
 
     /* Determine request path */
     r->path = determine_request_path(r->uri);
+    if (r->path == NULL){
+        debug("Null request path");
+        handle_error(r, HTTP_STATUS_BAD_REQUEST);
+    }    
     debug("HTTP REQUEST PATH: %s", r->path);
 
     /* Dispatch to appropriate request handler type */
@@ -42,8 +46,10 @@ handle_request(struct request *r)
     if (req == REQUEST_BROWSE) result = handle_browse_request(r);
     else if (req == REQUEST_FILE) result = handle_file_request(r);
     else if (req == REQUEST_CGI) result = handle_cgi_request(r);
-    else result = handle_error(r, HTTP_STATUS_NOT_FOUND);
-    
+    else {
+        debug("req");
+        result = handle_error(r, HTTP_STATUS_NOT_FOUND);
+    }
     log("HTTP REQUEST STATUS: %s", http_status_string(result));
     return result;
 }
@@ -61,9 +67,11 @@ handle_browse_request(struct request *r)
 {
     struct dirent **entries;
     int n;
-
+    
+    //debug("HBR Before: %s", r->path);
     /* Open a directory for reading or scanning */
     n = scandir(r->path, &entries, NULL, alphasort);
+    //debug("HBR After: %s", r->path);
     if (n < 0){
         return handle_error(r, HTTP_STATUS_NOT_FOUND);
     }
@@ -76,7 +84,7 @@ handle_browse_request(struct request *r)
     /* For each entry in directory, emit HTML list item */
     fprintf(r->file, "<ul>");
     for (int i = 0; i < n; i++){
-        if (!streq(entries[i]->d_name, ".") || streq(entries[i]->d_name, "..")){
+        if (streq(entries[i]->d_name, ".") || streq(entries[i]->d_name, "..")){
             continue;
         }
         // printing name of file in html
@@ -84,7 +92,7 @@ handle_browse_request(struct request *r)
     }
     
     fprintf(r->file, "</ul>"); // finish unordered list
-    free(entries); // deallocate
+    //free(entries); // deallocate
 
     /* Flush socket, return OK */
     fflush(r->file);

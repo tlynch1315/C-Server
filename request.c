@@ -193,9 +193,9 @@ parse_request_method(struct request *r)
 	}
 
     /* Parse query from uri */
-        char *query;
-        if(strchr(uri, '?') != NULL){
-	    query = strtok(strchr(uri, '?'), WHITESPACE);
+        char *query = strchr(uri, '?');
+        if(query != NULL){
+	    *query++ = '\0';
         }
         else{
             query = "";
