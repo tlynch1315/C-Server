@@ -250,7 +250,7 @@ handle_error(struct request *r, http_status status)
     fprintf(r->file, "\r\n");
 
     /* Write HTML Description of Error*/
-    fprintf(r->file, status_string);
+    fprintf(r->file, "%s\n", status_string);
     fflush(r->file);
 
     /* Return specified status */
