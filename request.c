@@ -89,7 +89,7 @@ free_request(struct request *r)
 
     /* Close socket or fd */
 	if (r->file != NULL)
-		close(r->file);
+		fclose(r->file);
 	else if (r->fd >= 0)
 		close(r->fd);
 
