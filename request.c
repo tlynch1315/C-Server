@@ -29,7 +29,8 @@ accept_request(int sfd)
 {
     struct request *r;
     struct sockaddr raddr;
-    socklen_t rlen;
+    socklen_t rlen = sizeof(struct sockaddr);
+
     //char host[NI_MAXHOST];
     //char port[NI_MAXSERV];
     int flags = NI_NUMERICHOST | NI_NUMERICSERV;
@@ -43,12 +44,10 @@ accept_request(int sfd)
         fprintf(stderr, "accept failed: %s\n", strerror(errno));
         goto fail;
     }
-
     /* Lookup client information */
-    rlen = sizeof(struct sockaddr);
     int nameData;
     if((nameData = getnameinfo(&raddr, rlen, r->host, sizeof(r->host), r->port, sizeof(r->port), flags)) < 0){
-        fprintf(stderr, "lookup failed: %s\n", strerror(errno));
+        fprintf(stderr, "lookup failed: %s\n", gai_strerror(nameData));
         goto fail;
     }
 
@@ -62,7 +61,9 @@ accept_request(int sfd)
     return r;
 
 fail:
+	log("Before Free");
     free_request(r);
+	log("After Free");
     return NULL;
 }
 
@@ -87,23 +88,34 @@ free_request(struct request *r)
     }
 
     /* Close socket or fd */
-	close(r->fd);
+	if (r->file != NULL)
+		close(r->file);
+	else if (r->fd >= 0)
+		close(r->fd);
 
     /* Free allocated strings */
+	debug("Method: >%s<", r->method);
+	debug("URI: >%s<", r->uri);
+	debug("Path: >%s<", r->path);
+	debug("Query: >%s<", r->query);
+	debug("host: >%s<", r->host);
+	debug("port: >%s<", r->port);
 	free(r->method);
 	free(r->uri);
 	free(r->path);
-	free(r->query);
+	if (!streq(r->query, ""))
+		free(r->query);
 	free(r->host);
 	free(r->port);
 
     /* Free headers */
-	while(r->headers->next){
-            header = r->headers;
-            header = header->next;
+	while(header->next){
+			free(header->name);
+			free(header->value);
             free(header);
+            header = header->next;
         }
-        free(r->headers);
+    free(r->headers);
 
     /* Free request */
 	free(r);
@@ -185,9 +197,9 @@ parse_request_method(struct request *r)
 	r->uri = strdup(uri);
 	r->query = strdup(query);
 
-    debug("HTTP METHOD: %s", r->method);
-    debug("HTTP URI:    %s", r->uri);
-    debug("HTTP QUERY:  %s", r->query);
+    debug("HTTP METHOD: >%s<", r->method);
+    debug("HTTP URI:    >%s<", r->uri);
+    debug("HTTP QUERY:  >%s<", r->query);
 
     return 0;
 
