@@ -101,31 +101,22 @@ free_request(struct request *r)
 	debug("host: >%s<", r->host);
 	debug("port: >%s<", r->port);
 	
-	if (!streq(r->method, ""))
-            free(r->method);
+    free(r->method);
 	
-	if (!streq(r->uri, ""))
-            free(r->uri);
+    free(r->uri);
 	
-	if (!streq(r->path, ""))
-            free(r->path);
+    free(r->path);
 	
-        if (!streq(r->query, ""))
-		free(r->query);
-        //if (!streq(r->host, ""))
-	//    free(r->host);
+	free(r->query);
 	
-	//if (!streq(r->query, ""))
-        //    free(r->port);
-
     /* Free headers */
-        struct header * help;
-	while(header->next){
-            help = header->next;
+    struct header * help;
+	while(header != NULL){
+        help = header->next;
 	    free(header->name);
 	    free(header->value);
-            free(header);
-            header = help;
+        free(header);
+        header = help;
         }
         //free(r->headers);
 
