@@ -43,7 +43,6 @@ main(int argc, char *argv[])
 
     /* Parse command line options */
     char * PROGRAM_NAME = argv[0];
-    if(argc == 1) usage(PROGRAM_NAME, 1);
     int argind = 1;
     while(argind < argc && strlen(argv[argind]) > 1 && argv[argind][0] == '-'){
         char * arg = argv[argind++];
