@@ -37,7 +37,7 @@ accept_request(int sfd)
 
     /* Allocate request struct (zeroed) */
     r = calloc(1, sizeof(struct request));
-    r->headers = NULL;
+    r->headers = calloc(1, sizeof(struct header));
 
     /* Accept a client */
     if((r->fd = accept(sfd, &raddr, &rlen)) < 0){
