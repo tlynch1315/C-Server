@@ -230,7 +230,7 @@ parse_request_headers(struct request *r)
     //r->hearders = curr;
     /* Parse headers from socket */
 
-    while(fgets(buffer, BUFSIZ, r->file) && strlen(buffer) > 1){
+    while(fgets(buffer, BUFSIZ, r->file) && strlen(buffer) > 2){
         curr = calloc(1, sizeof(struct header));
         if(curr == NULL)
             goto fail;
