@@ -170,14 +170,15 @@ parse_request_method(struct request *r)
 
     /* Parse query from uri */
         char *query;
-	if (strlen(uri) > 1){
-		query = strchr(uri, '?');
-		if (query == NULL){
-			fprintf(stderr, "Query entered incorrectly\n");
-			goto fail;
-		}
-		query++;
+        if(strchr(uri, '?') != NULL){
+	    query = strtok(strchr(uri, '?'), WHITESPACE);
+        }
+        else{
+            query = "";
+	    //fprintf(stderr, "Query entered incorrectly\n");
+	    //goto fail;
 	}
+	//query++;
 
     /* Record method, uri, and query in request struct */
 	r->method = strdup(Method);
