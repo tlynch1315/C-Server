@@ -38,11 +38,28 @@ determine_mimetype(const char *path)
     FILE *fs = NULL;
     
     /* Find file extension */
+    ext = strrchr(path, '.');
+    if (ext == NULL) goto fail;
+    ext += sizeof(char);    
 
     /* Open MimeTypesPath file */
-
+    fs = fopen(path, "r");
+    if (fs == NULL) goto fail;
+    
     /* Scan file for matching file extensions */
-   
+    while (fgets(buffer, BUFSIZ, fs)){
+        mimetype = strtok(skip_whitespace(buffer), WHITESPACE);
+        if (mimetype == NULL) continue;
+        token = strtok(NULL, WHITESPACE);
+        while (token != NULL){
+            if (streq(ext, token)){
+                goto done;
+            }
+        }
+    }
+    
+
+
 fail:
     mimetype = DefaultMimeType;
 
@@ -70,7 +87,9 @@ determine_request_path(const char *uri)
 {
     char path[BUFSIZ];
     char real[BUFSIZ];
-
+    sprintf(path, "%s/%s", RootPath, uri);
+    realpath(path, real);
+    if (strncmp(real, RootPath, strlen(RootPath)) != 0) return NULL;
     return strdup(real);
 }
 
@@ -90,7 +109,11 @@ determine_request_type(const char *path)
 {
     struct stat s;
     request_type type;
-
+    
+    if (stat(path, &s) < 0) type = REQUEST_BAD;
+    else if (S_ISDIR(s.st_mode)) type = REQUEST_BROWSE;
+    else if (access(path, X_OK | R_OK)) type = REQUEST_CGI;
+    else if (access(path, R_OK)) type = REQUEST_FILE;
     return (type);
 }
 
@@ -103,7 +126,22 @@ const char *
 http_status_string(http_status status)
 {
     const char *status_string;
-
+    switch (status) {
+        case HTTP_STATUS_OK:
+            status_string = "200 OK";
+            break;
+        case HTTP_STATUS_BAD_REQUEST:
+            status_string = "400 Bad Request";
+            break;
+        case HTTP_STATUS_NOT_FOUND:
+            status_string = "404 Not Found";
+            break;
+        case HTTP_STATUS_INTERNAL_SERVER_ERROR:
+            status_string = "500 Internal Server Error";
+            break;
+        default:
+            status_string = NULL;
+    }
     return status_string;
 }
 
@@ -113,6 +151,7 @@ http_status_string(http_status status)
 char *
 skip_nonwhitespace(char *s)
 {
+    while (!isspace(*s) && s != NULL) s++;
     return s;
 }
 
@@ -122,6 +161,7 @@ skip_nonwhitespace(char *s)
 char *
 skip_whitespace(char *s)
 {
+    while (isspace(*s) && s != NULL) s++;
     return s;
 }
 
