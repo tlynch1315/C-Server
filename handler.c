@@ -80,20 +80,32 @@ handle_browse_request(struct request *r)
     fprintf(r->file, "HTTP/1.0 200 OK\r\n");
     fprintf(r->file, "Content-Type: text/html\r\n");
     fprintf(r->file, "\r\n");
-
+    
+    // Bootstrap Implementation
+    fprintf(r->file, "<!DOCTYPE html>");
+    fprintf(r->file, "<html lang=\"en\">");
+    fprintf(r->file, "<head>");
+    fprintf(r->file, "<title>Guru Point :)</title>");
+    fprintf(r->file, "<meta name=\"viewport\" content=\"width=device-width, inital-scale=1\">");
+    fprintf(r->file, "<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\">");
+    fprintf(r->file, "</head>");
+    fprintf(r->file, "<body>");
+    
     /* For each entry in directory, emit HTML list item */
-    fprintf(r->file, "<ul>");
+    fprintf(r->file, "<ul class=\"list-group\">");
     for (int i = 0; i < n; i++){
         if (streq(entries[i]->d_name, ".") || streq(entries[i]->d_name, "..")){
             continue;
         }
         // printing name of file in html
-        fprintf(r->file, "<li><a href = \"%s/%s\">%s</a></li>\n", streq(r->uri, "/") ? "" : r->uri, entries[i]->d_name, entries[i]->d_name);
+        fprintf(r->file, "<li class=\"list-group-item\"><a href = \"%s/%s\">%s</a></li>\n", streq(r->uri, "/") ? "" : r->uri, entries[i]->d_name, entries[i]->d_name);
     }
     
     fprintf(r->file, "</ul>"); // finish unordered list
+    fprintf(r->file, "</body>");
+    fprintf(r->file, "</html>");
     //free(entries); // deallocate
-
+    
     /* Flush socket, return OK */
     fflush(r->file);
     return HTTP_STATUS_OK;
@@ -247,8 +259,18 @@ handle_error(struct request *r, http_status status)
     fprintf(r->file, "Content-Type: text/html\r\n");
     fprintf(r->file, "\r\n");
 
+     // Bootstrap Implementation
+    fprintf(r->file, "<!DOCTYPE html>");
+    fprintf(r->file, "<html lang=\"en\">");
+    fprintf(r->file, "<head>");
+    fprintf(r->file, "<title>Guru Point :)</title>");
+    fprintf(r->file, "<meta name=\"viewport\" content=\"width=device-width, inital-scale=1\">");
+    fprintf(r->file, "<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\">");
+    fprintf(r->file, "</head>");
+    fprintf(r->file, "<body>");
+
     /* Write HTML Description of Error*/
-    fprintf(r->file, "%s\n", status_string);
+    fprintf(r->file, "<p class=\"bg-primary\">%s</p>\n", status_string);
     fflush(r->file);
 
     /* Return specified status */
