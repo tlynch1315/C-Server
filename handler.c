@@ -128,12 +128,10 @@ handle_file_request(struct request *r)
     fprintf(r->file, "HTTP/1.0 OK\n");
     fprintf(r->file, "Content-Type: %s\r\n", mimetype);
     fprintf(r->file, "\r\n");
-    
     /* Read from file and write to socket in chunks */
     while ((nread = fread(buffer, sizeof(char), BUFSIZ, fs)) > 0){
         fwrite(buffer, sizeof(char), nread, r->file);
     }
-    
     /* Close file, flush socket, deallocate mimetype, return OK */
     fclose(fs);
     fflush(r->file);

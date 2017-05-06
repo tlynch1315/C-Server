@@ -39,19 +39,23 @@ determine_mimetype(const char *path)
     
     /* Find file extension */
     ext = strrchr(path, '.');
-    if (ext == NULL) goto fail;
-    ext += sizeof(char);    
+	if (ext == NULL){
+		fprintf(stderr, "Failed to find the extension\n");
+		goto fail;
+	}
+    ext++;    
 
     /* Open MimeTypesPath file */
-    fs = fopen(path, "r");
-    if (fs == NULL) goto fail;
-    
+    fs = fopen(MimeTypesPath, "r");
+    if (fs == NULL){
+		fprintf(stderr, "Failed to open mimetype: %s\n", strerror(errno));
+		goto fail;
+    }
     /* Scan file for matching file extensions */
     while (fgets(buffer, BUFSIZ, fs)){
         mimetype = strtok(skip_whitespace(buffer), WHITESPACE);
-        if (mimetype == NULL) continue;
-        token = strtok(NULL, WHITESPACE);
-        while (token != NULL){
+        if (mimetype == NULL || streq(mimetype, "#")) continue;
+        while ((token = strtok(NULL, WHITESPACE)) != NULL){
             if (streq(ext, token)){
                 goto done;
             }
