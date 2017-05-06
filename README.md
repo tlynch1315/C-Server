@@ -15,6 +15,24 @@ Summary
 
 Latency
 -------
+2. Describe how your group went about measuring the average latency of the different types of requests. You should have a markdown table produced by your experiments that you analyze and explain.
+~ We measured the latency by creating a shell script that ran the thor.py script with a thousand requests for the main spidey server and each of the three folders in it. The script then outputted the final line of thor.py that displays the average time of the thousand requests. We did this three times running 1 core, 2 cores, and 4 cores respectively. We also used the unix time command so that the time it took to process a thousand requests for each use of cores was also outputted. For the first group we ran spidey on student00 without forking and ran the shell script from Zac's personal computer. We then did the tests again using forking.
+
+Latency of Single
+| Cores | Time to process 1000 (Homepage) | Average of Homepage | Average of HTML | Average of Scripts | Average of Text |
+|-------|---------------------------------|---------------------|-----------------|--------------------|-----------------|
+|   1   |            8.203s               |       .00801s       |     .00895s     |       .01094s      |     .01228s     |
+|   2   |            9.396s               |       .00927s       |     .01618s     |       .01144s      |     .01100s     |
+|   4   |           13.405s               |       .01318s       |     .01290s     |       .01289s      |     .01285s     |
+
+Latency of Forking
+| Cores | Time to process 1000 (Homepage) | Average of Homepage | Average of HTML | Average of Scripts | Average of Text |
+|-------|---------------------------------|---------------------|-----------------|--------------------|-----------------|
+|   1   |        8.194s                   |       .00801s       |     .00991s     |       .00887s      |     .00849s     |
+|   2   |       11.694s                   |       .01117s       |     .01276s     |       .01043s      |     .01165s     |
+|   4   |       16.919s                   |       .01460s       |     .01264s     |       .01316s      |     .01438s     |
+
+From this we can see that forking produces a faster response than handling one request a time. Also based on this output using multiple cores causes the process to take longer. This makes since for single mode because the server can only handle one request a time so the time spent splitting the requests is wasted. However you should expect using multiple cores to produce a faster result for the forking mode. That isn't true for a thousand requests because a single core is still the fastest. However we guessed that this is just because a thousand isn't a large enough sample size to have an impact. We ran the script again with ten thousand requests and that caused for four cores to be the fastest performer, although it took over a minute to run each stage of the script overall. 
 
 Throughput
 ----------
