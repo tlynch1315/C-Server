@@ -19,6 +19,7 @@ Latency
 ~ We measured the latency by creating a shell script that ran the thor.py script with a thousand requests for the main spidey server and each of the three folders in it. The script then outputted the final line of thor.py that displays the average time of the thousand requests. We did this three times running 1 core, 2 cores, and 4 cores respectively. We also used the unix time command so that the time it took to process a thousand requests for each use of cores was also outputted. For the first group we ran spidey on student00 without forking and ran the shell script from Zac's personal computer. We then did the tests again using forking.
 
 Latency of Single
+
 | Cores | Time to process 1000 (Homepage) | Average of Homepage | Average of HTML | Average of Scripts | Average of Text |
 |-------|---------------------------------|---------------------|-----------------|--------------------|-----------------|
 |   1   |            8.203s               |       .00801s       |     .00895s     |       .01094s      |     .01228s     |
@@ -26,6 +27,7 @@ Latency of Single
 |   4   |           13.405s               |       .01318s       |     .01290s     |       .01289s      |     .01285s     |
 
 Latency of Forking
+
 | Cores | Time to process 1000 (Homepage) | Average of Homepage | Average of HTML | Average of Scripts | Average of Text |
 |-------|---------------------------------|---------------------|-----------------|--------------------|-----------------|
 |   1   |        8.194s                   |       .00801s       |     .00991s     |       .00887s      |     .00849s     |
