@@ -176,13 +176,13 @@ parse_request_method(struct request *r)
         log("Full Request: %s", buffer);
 
     /* Parse method and uri */
-	char *Method;
-	if ((Method = strtok(skip_whitespace(buffer), WHITESPACE)) == NULL){
+        char * Method = strtok(buffer, WHITESPACE);
+	if (Method == NULL){
 		fprintf(stderr, "Method entered incorrectly\n");
 		goto fail;
 	}
-	char *uri;
-	if ((uri = strtok(NULL, WHITESPACE)) == NULL){
+	char *uri = strtok(NULL, WHITESPACE);
+	if (uri == NULL){
 		fprintf(stderr, "URI entered incorrectly\n");
 		goto fail;
 	}
