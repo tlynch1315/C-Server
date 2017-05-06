@@ -36,12 +36,14 @@ forking_server(int sfd)
 		if (pid < 0){
 			fprintf(stderr, "Unable to fork: %s\n", strerror(errno));
 			fclose(request->file);
+			free_request(request);
 			continue;
 		}
 		else if (pid == 0){
     		/* Close server socket and exit*/
     		handle_request(request);
     		fclose(request->file);
+			free_request(request);
     		exit(EXIT_SUCCESS);
 		}else{
         	free_request(request);
