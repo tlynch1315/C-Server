@@ -39,6 +39,7 @@ Throughput
 
 Analysis
 --------
+See comments following respective tables
 
 Conclusion
 ----------
