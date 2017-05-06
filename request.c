@@ -177,7 +177,7 @@ parse_request_method(struct request *r)
 
     /* Parse method and uri */
 	char *Method;
-	if ((Method = strtok(buffer, WHITESPACE)) == NULL){
+	if ((Method = strtok(skip_whitespace(buffer), WHITESPACE)) == NULL){
 		fprintf(stderr, "Method entered incorrectly\n");
 		goto fail;
 	}
