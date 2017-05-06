@@ -37,7 +37,6 @@ accept_request(int sfd)
 
     /* Allocate request struct (zeroed) */
     r = calloc(1, sizeof(struct request));
-   // r->headers = calloc(1, sizeof(struct header));
     r->headers = NULL;
 
     /* Accept a client */
@@ -55,6 +54,7 @@ accept_request(int sfd)
     /* Open socket stream */
     if((r->file = fdopen(r->fd, "w+")) == NULL){
         fprintf(stderr, "open socket failed: %s\n", strerror(errno));
+        close(r->fd);
         goto fail;
     }
 
@@ -135,15 +135,13 @@ int
 parse_request(struct request *r)
 {
     /* Parse HTTP Request Method */
-	int Method;
-	if ((Method = parse_request_method(r))){
+	if (parse_request_method(r) < 0){
 		fprintf(stderr, "Parsing the request method failed");
 		return -1;
 	}
 
     /* Parse HTTP Requet Headers*/
-	int Header;
-	if ((Header = parse_request_headers(r))){
+	if (parse_request_headers(r) < 0){
 		fprintf(stderr, "Parsing the request header failed");
 		return -1;
 	}
@@ -171,6 +169,11 @@ parse_request_method(struct request *r)
     /* Read line from socket */
 	char buffer[BUFSIZ];
 	fgets(buffer, BUFSIZ, r->file);
+        if(buffer == NULL){
+            fprintf(stderr, "Method parsing failed: %s\n", strerror(errno));
+            goto fail;
+        }
+        log("Full Request: %s", buffer);
 
     /* Parse method and uri */
 	char *Method;
