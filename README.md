@@ -1,5 +1,12 @@
 Project 02 - README
 ===================
+The goal of this project was to practice using low-level system calls related to sockets and networking. To do this, we created two new programs:
+
+thor.py: This is a basic HTTP client that will hammer a remote HTTP server by making multiple requests.
+
+spidey.c: This is a basic HTTP server that supports directory listings, static files, and CGI scripts.
+
+Once we had these programs, we conducted an experiment using thor.py to test the latency and throughput of spidey.py.
 
 Members
 -------
